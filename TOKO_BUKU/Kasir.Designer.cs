@@ -140,6 +140,7 @@
             this.button3.TabIndex = 2;
             this.button3.Text = "Logout";
             this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // label11
             // 
@@ -190,6 +191,7 @@
             this.button2.TabIndex = 16;
             this.button2.Text = "Cari Buku";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.btnCari_Click);
             // 
             // textBox2
             // 
@@ -295,6 +297,7 @@
             this.button1.TabIndex = 10;
             this.button1.Text = "Cetak Struk";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.btnBayar_Click);
             // 
             // label12
             // 
