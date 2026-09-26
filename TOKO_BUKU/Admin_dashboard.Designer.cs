@@ -31,16 +31,19 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.total_stoc = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.total_transaksi = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.penjualan = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.Transaksi = new System.Windows.Forms.DataGridView();
@@ -48,24 +51,21 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.totalbuku = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Transaksi)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
-            this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label2
@@ -101,6 +101,16 @@
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(218, 65);
             this.panel6.TabIndex = 26;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = global::TOKO_BUKU.Properties.Resources.cardboard_box_icon_vector__Isolated_contour_symbol_illustration;
+            this.pictureBox3.Location = new System.Drawing.Point(141, 0);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(77, 65);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox3.TabIndex = 27;
+            this.pictureBox3.TabStop = false;
             // 
             // total_stoc
             // 
@@ -159,6 +169,16 @@
             this.panel5.Size = new System.Drawing.Size(218, 65);
             this.panel5.TabIndex = 26;
             // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Image = global::TOKO_BUKU.Properties.Resources.download__1_;
+            this.pictureBox4.Location = new System.Drawing.Point(141, 0);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(77, 65);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox4.TabIndex = 27;
+            this.pictureBox4.TabStop = false;
+            // 
             // total_transaksi
             // 
             this.total_transaksi.AutoSize = true;
@@ -216,13 +236,23 @@
             this.panel4.Size = new System.Drawing.Size(218, 65);
             this.panel4.TabIndex = 26;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::TOKO_BUKU.Properties.Resources.penjualan;
+            this.pictureBox2.Location = new System.Drawing.Point(141, 0);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(77, 65);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 27;
+            this.pictureBox2.TabStop = false;
+            // 
             // penjualan
             // 
             this.penjualan.AutoSize = true;
             this.penjualan.BackColor = System.Drawing.Color.Transparent;
             this.penjualan.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.penjualan.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
-            this.penjualan.Location = new System.Drawing.Point(22, 23);
+            this.penjualan.Location = new System.Drawing.Point(8, 23);
             this.penjualan.Name = "penjualan";
             this.penjualan.Size = new System.Drawing.Size(21, 24);
             this.penjualan.TabIndex = 25;
@@ -299,6 +329,16 @@
             this.panel3.Size = new System.Drawing.Size(218, 65);
             this.panel3.TabIndex = 0;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::TOKO_BUKU.Properties.Resources.book_icon;
+            this.pictureBox1.Location = new System.Drawing.Point(141, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(77, 65);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 26;
+            this.pictureBox1.TabStop = false;
+            // 
             // totalbuku
             // 
             this.totalbuku.AutoSize = true;
@@ -335,46 +375,6 @@
             this.label11.TabIndex = 27;
             this.label11.Text = "Dashboard";
             // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Image = global::TOKO_BUKU.Properties.Resources.cardboard_box_icon_vector__Isolated_contour_symbol_illustration;
-            this.pictureBox3.Location = new System.Drawing.Point(141, 0);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(77, 65);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox3.TabIndex = 27;
-            this.pictureBox3.TabStop = false;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Image = global::TOKO_BUKU.Properties.Resources.download__1_;
-            this.pictureBox4.Location = new System.Drawing.Point(141, 0);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(77, 65);
-            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox4.TabIndex = 27;
-            this.pictureBox4.TabStop = false;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = global::TOKO_BUKU.Properties.Resources.penjualan;
-            this.pictureBox2.Location = new System.Drawing.Point(141, 0);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(77, 65);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 27;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::TOKO_BUKU.Properties.Resources.book_icon;
-            this.pictureBox1.Location = new System.Drawing.Point(141, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(77, 65);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 26;
-            this.pictureBox1.TabStop = false;
-            // 
             // Admin_dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -388,20 +388,20 @@
             this.Text = "Admin_dashboard";
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Transaksi)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

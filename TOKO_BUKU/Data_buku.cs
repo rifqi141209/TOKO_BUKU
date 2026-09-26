@@ -62,9 +62,11 @@ namespace TOKO_BUKU
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(textBox7.Text))
+            if (string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(textBox7.Text) ||
+                string.IsNullOrWhiteSpace(textBox3.Text) || string.IsNullOrWhiteSpace(textBox6.Text) ||
+                string.IsNullOrWhiteSpace(textBox8.Text) || string.IsNullOrWhiteSpace(textBox5.Text))
             {
-                MessageBox.Show("Kode Buku dan Judul wajib diisi!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Data tidak boleh kosong.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -85,7 +87,7 @@ namespace TOKO_BUKU
                         cmd.Parameters.AddWithValue("@stok", int.Parse(textBox5.Text));
 
                         cmd.ExecuteNonQuery();
-                        MessageBox.Show("Data buku berhasil disimpan!", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Buku berhasil ditambahkan.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         BersihkanForm();
                         TampilData();
                     }
@@ -124,7 +126,7 @@ namespace TOKO_BUKU
                         int baris = cmd.ExecuteNonQuery();
                         if (baris > 0)
                         {
-                            MessageBox.Show("Data buku berhasil diubah!", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Buku berhasil diperbarui.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             BersihkanForm();
                             TampilData();
                         }
@@ -149,7 +151,7 @@ namespace TOKO_BUKU
                 return;
             }
 
-            if (MessageBox.Show("Yakin ingin menghapus buku ini?", "Konfirmasi Hapus", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Apakah Anda yakin ingin menghapus buku ini?", "Konfirmasi Hapus", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 try
                 {
@@ -161,7 +163,7 @@ namespace TOKO_BUKU
                         {
                             cmd.Parameters.AddWithValue("@kode", textBox2.Text);
                             cmd.ExecuteNonQuery();
-                            MessageBox.Show("Data buku berhasil dihapus!", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Buku berhasil dihapus.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             BersihkanForm();
                             TampilData();
                         }
@@ -182,9 +184,17 @@ namespace TOKO_BUKU
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string cari = (textBox1.Text == "Cari Judul / Kode Buku.....") ? "" : textBox1.Text;
+                    string placeholder = "Cari Judul / Kode Buku.....";
+                    string cari = (textBox1.Text == placeholder) ? "" : textBox1.Text.Trim();
 
-                    string query = "SELECT * FROM books WHERE judul LIKE @cari OR kode_buku LIKE @cari";
+                    if (string.IsNullOrEmpty(cari))
+                    {
+                        
+                        TampilData();
+                        return;
+                    }
+
+                    string query = "SELECT * FROM books WHERE judul LIKE @cari OR kode_buku LIKE @cari OR pengarang LIKE @cari OR penerbit LIKE @cari";
                     MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn);
                     adapter.SelectCommand.Parameters.AddWithValue("@cari", "%" + cari + "%");
 
@@ -205,6 +215,17 @@ namespace TOKO_BUKU
             textBox1.ForeColor = Color.Gray;
             textBox1.Enter += TextBox1_Enter;
             textBox1.Leave += TextBox1_Leave;
+            textBox1.KeyDown += TextBox1_KeyDown;
+        }
+
+        private void TextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                button1.PerformClick();
+            }
         }
 
         private void TextBox1_Enter(object sender, EventArgs e)
