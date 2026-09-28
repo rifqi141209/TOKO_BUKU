@@ -23,48 +23,54 @@ namespace TOKO_BUKU
 
         private void InitializeComponent()
         {
-            this.richTextBox1 = new RichTextBox();
-            this.buttonPrint = new Button();
-            this.buttonClose = new Button();
-            this.printDocument1 = new PrintDocument();
-
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.buttonPrint = new System.Windows.Forms.Button();
+            this.buttonClose = new System.Windows.Forms.Button();
+            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.SuspendLayout();
-
-
-            this.richTextBox1.Font = new Font("Consolas", 10);
-            this.richTextBox1.Location = new Point(12, 12);
-            this.richTextBox1.Size = new Size(320, 420);
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.BackColor = System.Drawing.Color.White;
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBox1.Font = new System.Drawing.Font("Consolas", 10F);
+            this.richTextBox1.Location = new System.Drawing.Point(6, 12);
+            this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.BorderStyle = BorderStyle.FixedSingle;
-            this.richTextBox1.BackColor = Color.White;
+            this.richTextBox1.Size = new System.Drawing.Size(320, 420);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "";
             this.richTextBox1.WordWrap = false;
-
-
+            // 
+            // buttonPrint
+            // 
+            this.buttonPrint.Location = new System.Drawing.Point(12, 444);
+            this.buttonPrint.Name = "buttonPrint";
+            this.buttonPrint.Size = new System.Drawing.Size(100, 30);
+            this.buttonPrint.TabIndex = 1;
             this.buttonPrint.Text = "Cetak";
-            this.buttonPrint.Location = new Point(12, 444);
-            this.buttonPrint.Size = new Size(100, 30);
-            this.buttonPrint.Click += ButtonPrint_Click;
-
-
+            // 
+            // buttonClose
+            // 
+            this.buttonClose.Location = new System.Drawing.Point(222, 444);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(100, 30);
+            this.buttonClose.TabIndex = 2;
             this.buttonClose.Text = "Tutup";
-            this.buttonClose.Location = new Point(232, 444);
-            this.buttonClose.Size = new Size(100, 30);
-            NewMethod();
-
-            this.printDocument1.BeginPrint += PrintDocument1_BeginPrint;
-            this.printDocument1.PrintPage += PrintDocument1_PrintPage;
-
-
-            this.ClientSize = new Size(344, 486);
+            // 
+            // Struk
+            // 
+            this.ClientSize = new System.Drawing.Size(335, 486);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.buttonPrint);
             this.Controls.Add(this.buttonClose);
-            this.Text = "Struk";
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.StartPosition = FormStartPosition.CenterParent;
-
+            this.Name = "Struk";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Struk";
             this.ResumeLayout(false);
+
         }
 
         private void NewMethod()

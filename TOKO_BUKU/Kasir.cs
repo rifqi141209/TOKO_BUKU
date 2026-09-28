@@ -298,5 +298,29 @@ namespace TOKO_BUKU
             base.OnFormClosed(e);
             Application.Exit();
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            { 
+                if (e.RowIndex >= 0)
+                {
+                    if (!dataGridView1.Rows[e.RowIndex].IsNewRow)
+                    {
+                        DialogResult dialog = MessageBox.Show("hapus data? ", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        if (dialog == DialogResult.Yes)
+                        {
+                            
+                            dataGridView1.Rows.RemoveAt(e.RowIndex);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("error bosqu " + ex.Message);
+            }
+        }
     }
 }

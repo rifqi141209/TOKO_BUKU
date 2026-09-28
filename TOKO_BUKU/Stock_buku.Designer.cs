@@ -109,6 +109,7 @@
             // textBox2
             // 
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox2.Enabled = false;
             this.textBox2.Location = new System.Drawing.Point(142, 33);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(159, 20);
@@ -222,7 +223,7 @@
             this.button3.Text = "Logout";
             this.button3.UseVisualStyleBackColor = false;
             // 
-            // Stock_kasir
+            // Stock_buku
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -230,7 +231,7 @@
             this.Controls.Add(this.label14);
             this.Controls.Add(this.panel7);
             this.Controls.Add(this.panel1);
-            this.Name = "Stock_kasir";
+            this.Name = "Stock_buku";
             this.Text = "Stock_kasir";
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
