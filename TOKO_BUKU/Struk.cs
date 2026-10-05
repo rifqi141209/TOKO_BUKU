@@ -7,18 +7,25 @@ namespace TOKO_BUKU
 {
     public class Struk : Form
     {
+        
         private RichTextBox richTextBox1;
         private Button buttonPrint;
         private Button buttonClose;
         private PrintDocument printDocument1;
-        private string receiptText;
-        private int printCharIndex = 0;
 
-        public Struk(string text)
+      
+        private string isiStruk;
+        private int indexKarakterCetak = 0;
+
+        public Struk(string teksTruk)
         {
-            receiptText = text ?? string.Empty;
             InitializeComponent();
-            richTextBox1.Text = receiptText;
+            isiStruk = teksTruk ?? "";
+            richTextBox1.Text = isiStruk;         
+            buttonClose.Click += (sender, e) => this.Close();
+            buttonPrint.Click += TombolCetak_Click;
+            printDocument1.BeginPrint += Proses_MulaiCetak;
+            printDocument1.PrintPage += Proses_CetakHalaman;
         }
 
         private void InitializeComponent()
@@ -28,9 +35,6 @@ namespace TOKO_BUKU
             this.buttonClose = new System.Windows.Forms.Button();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.SuspendLayout();
-            // 
-            // richTextBox1
-            // 
             this.richTextBox1.BackColor = System.Drawing.Color.White;
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.richTextBox1.Font = new System.Drawing.Font("Consolas", 10F);
@@ -41,25 +45,22 @@ namespace TOKO_BUKU
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             this.richTextBox1.WordWrap = false;
-            // 
-            // buttonPrint
-            // 
+
+            // Konfigurasi buttonPrint
             this.buttonPrint.Location = new System.Drawing.Point(12, 444);
             this.buttonPrint.Name = "buttonPrint";
             this.buttonPrint.Size = new System.Drawing.Size(100, 30);
             this.buttonPrint.TabIndex = 1;
             this.buttonPrint.Text = "Cetak";
-            // 
-            // buttonClose
-            // 
+
+            // Konfigurasi buttonClose
             this.buttonClose.Location = new System.Drawing.Point(222, 444);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(100, 30);
             this.buttonClose.TabIndex = 2;
             this.buttonClose.Text = "Tutup";
-            // 
-            // Struk
-            // 
+
+            // Konfigurasi Form Utama (Struk)
             this.ClientSize = new System.Drawing.Size(335, 486);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.buttonPrint);
@@ -68,24 +69,20 @@ namespace TOKO_BUKU
             this.MaximizeBox = false;
             this.Name = "Struk";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Struk";
+            this.Text = "Pratinjau Struk";
             this.ResumeLayout(false);
-
         }
 
-        private void NewMethod()
-        {
-            this.buttonClose.Click += (s, e) => this.Close();
-        }
-
-        private void ButtonPrint_Click(object sender, EventArgs e)
+      
+        private void TombolCetak_Click(object sender, EventArgs e)
         {
             try
             {
-                using (PrintDialog dlg = new PrintDialog())
+                using (PrintDialog dialogCetak = new PrintDialog())
                 {
-                    dlg.Document = printDocument1;
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    dialogCetak.Document = printDocument1;
+
+                    if (dialogCetak.ShowDialog(this) == DialogResult.OK)
                     {
                         printDocument1.Print();
                     }
@@ -93,39 +90,47 @@ namespace TOKO_BUKU
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Print gagal: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Gagal mencetak struk: " + ex.Message, "Error Cetak", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void PrintDocument1_BeginPrint(object sender, PrintEventArgs e)
+       
+        private void Proses_MulaiCetak(object sender, PrintEventArgs e)
         {
-            printCharIndex = 0;
+            indexKarakterCetak = 0;
         }
 
-        private void PrintDocument1_PrintPage(object sender, PrintPageEventArgs e)
+      
+        private void Proses_CetakHalaman(object sender, PrintPageEventArgs e)
         {
-            using (Font printFont = new Font("Consolas", 10))
+            using (Font fontCetak = new Font("Consolas", 10))
             {
-                float leftMargin = e.MarginBounds.Left;
-                float topMargin = e.MarginBounds.Top;
-                int charsFitted = 0;
-                int linesFilled = 0;
+                float marginKiri = e.MarginBounds.Left;
+                float marginAtas = e.MarginBounds.Top;
+                int karakter = 0;
+                int baris = 0;
 
-                string remaining = receiptText.Substring(printCharIndex);
-                if (string.IsNullOrEmpty(remaining))
+               
+                string sisaTeks = isiStruk.Substring(indexKarakterCetak);
+
+                if (string.IsNullOrEmpty(sisaTeks))
                 {
                     e.HasMorePages = false;
                     return;
                 }
 
-                // Measure how many characters fit
-                e.Graphics.MeasureString(remaining, printFont, new SizeF(e.MarginBounds.Width, e.MarginBounds.Height), StringFormat.GenericTypographic, out charsFitted, out linesFilled);
+                e.Graphics.MeasureString(sisaTeks, fontCetak,
+                    new SizeF(e.MarginBounds.Width, e.MarginBounds.Height),
+                    StringFormat.GenericTypographic, out karakter, out baris);
 
-                string pageText = remaining.Substring(0, Math.Min(charsFitted, remaining.Length));
-                e.Graphics.DrawString(pageText, printFont, Brushes.Black, new RectangleF(leftMargin, topMargin, e.MarginBounds.Width, e.MarginBounds.Height), StringFormat.GenericTypographic);
+                string teksHalamanIni = sisaTeks.Substring(0, Math.Min(karakter, sisaTeks.Length));
 
-                printCharIndex += charsFitted;
-                e.HasMorePages = printCharIndex < receiptText.Length;
+                e.Graphics.DrawString(teksHalamanIni, fontCetak, Brushes.Black,
+                    new RectangleF(marginKiri, marginAtas, e.MarginBounds.Width, e.MarginBounds.Height),
+                    StringFormat.GenericTypographic);
+
+                indexKarakterCetak += karakter;
+                e.HasMorePages = indexKarakterCetak < isiStruk.Length;
             }
         }
     }
