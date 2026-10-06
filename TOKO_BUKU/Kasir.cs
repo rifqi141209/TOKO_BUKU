@@ -151,7 +151,7 @@ namespace TOKO_BUKU
             foreach (DataRow row in keranjang.Rows) total += Convert.ToDecimal(row["subtotal"]);
 
             label8.Text = "Rp " + total.ToString("N0");
-            label9.Text = total.ToString("N0");
+            label9.Text = "Rp " + total.ToString("N0");
         }
 
         private void btnHapus_Click(object sender, EventArgs e)

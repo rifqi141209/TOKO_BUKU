@@ -44,6 +44,7 @@ namespace TOKO_BUKU
                     string tglMulai = dateTimePicker1.Value.ToString("yyyy-MM-dd");
                     string tglSelesai = dateTimePicker2.Value.ToString("yyyy-MM-dd 23:59:59");
 
+                    //untuk menampilkan data tanggal (dari - sampai)
                     string queryData = "SELECT * FROM transactions WHERE tanggal BETWEEN @tgl1 AND @tgl2";
                     using (MySqlDataAdapter adapter = new MySqlDataAdapter(queryData, conn))
                     {
@@ -54,7 +55,7 @@ namespace TOKO_BUKU
                         adapter.Fill(dt);
                         dataGridView1.DataSource = dt;
                     }
-
+                    //untuk mengjitung total transaksi 
                     string queryRingkasan = "SELECT COUNT(*), SUM(total_harga) FROM transactions WHERE tanggal BETWEEN @tgl1 AND @tgl2";
                     using (MySqlCommand cmd = new MySqlCommand(queryRingkasan, conn))
                     {
@@ -108,6 +109,7 @@ namespace TOKO_BUKU
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
+                    //untuk menampilkan data detail transaksi berdasarkan taggal awal dan sampai nya
                     string query = @"SELECT td.id_detail, b.kode_buku, b.judul, td.jumlah, td.subtotal 
                                      FROM transaction_details td 
                                      JOIN books b ON td.id_buku = b.id_buku 
@@ -138,7 +140,7 @@ namespace TOKO_BUKU
                     chart1.Series.Clear();
                     chart1.Series.Add("Series1");
                 }
-
+                //untuk menampilkan garfik data penjualan 
                 string queryGrafik = "SELECT tanggal, total_harga FROM transactions WHERE tanggal BETWEEN @tgl1 AND @tgl2 ORDER BY tanggal ASC";
                 using (MySqlCommand cmd = new MySqlCommand(queryGrafik, conn))
                 {

@@ -35,6 +35,9 @@ namespace TOKO_BUKU
             this.buttonClose = new System.Windows.Forms.Button();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.SuspendLayout();
+            // 
+            // richTextBox1
+            // 
             this.richTextBox1.BackColor = System.Drawing.Color.White;
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.richTextBox1.Font = new System.Drawing.Font("Consolas", 10F);
@@ -45,22 +48,25 @@ namespace TOKO_BUKU
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             this.richTextBox1.WordWrap = false;
-
-            // Konfigurasi buttonPrint
+            // 
+            // buttonPrint
+            // 
             this.buttonPrint.Location = new System.Drawing.Point(12, 444);
             this.buttonPrint.Name = "buttonPrint";
             this.buttonPrint.Size = new System.Drawing.Size(100, 30);
             this.buttonPrint.TabIndex = 1;
             this.buttonPrint.Text = "Cetak";
-
-            // Konfigurasi buttonClose
+            // 
+            // buttonClose
+            // 
             this.buttonClose.Location = new System.Drawing.Point(222, 444);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(100, 30);
             this.buttonClose.TabIndex = 2;
             this.buttonClose.Text = "Tutup";
-
-            // Konfigurasi Form Utama (Struk)
+            // 
+            // Struk
+            // 
             this.ClientSize = new System.Drawing.Size(335, 486);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.buttonPrint);
@@ -71,6 +77,7 @@ namespace TOKO_BUKU
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Pratinjau Struk";
             this.ResumeLayout(false);
+
         }
 
       
