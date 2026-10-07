@@ -94,7 +94,7 @@ namespace TOKO_BUKU
             {
                 using (PrintDialog dialogCetak = new PrintDialog())
                 {
-                    dialogCetak.Document = printDocument2; // Pastikan mengarah ke printDocument2
+                    dialogCetak.Document = printDocument2;
 
                     if (dialogCetak.ShowDialog(this) == DialogResult.OK)
                     {
@@ -110,19 +110,19 @@ namespace TOKO_BUKU
 
         private void TombolTutup_Click(object sender, EventArgs e)
         {
-            this.Close(); // Menutup form struk
+            this.Close(); 
         }
 
         private void Proses_MulaiCetak(object sender, PrintEventArgs e)
         {
-            indexKarakterCetak = 0; // Reset hitungan karakter setiap kali mulai print
+            indexKarakterCetak = 0; 
         }
 
         private void printDocument2_PrintPage(object sender, PrintPageEventArgs e)
         {
-            using (Font fontCetak = new Font("Consolas", 9)) // Font disamakan dengan UI
+            using (Font fontCetak = new Font("Consolas", 9)) 
             {
-                // Margin default Windows terlalu besar untuk struk (kertas kecil), kita set manual ke 10
+                
                 float marginKiri = 10;
                 float marginAtas = 10;
 
@@ -137,7 +137,7 @@ namespace TOKO_BUKU
                     return;
                 }
 
-                // Hitung batas area kertas
+               
                 SizeF areaCetak = new SizeF(e.PageBounds.Width - 20, e.PageBounds.Height - 20);
 
                 e.Graphics.MeasureString(sisaTeks, fontCetak,

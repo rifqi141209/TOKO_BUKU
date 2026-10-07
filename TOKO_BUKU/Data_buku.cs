@@ -54,7 +54,7 @@ namespace TOKO_BUKU
             textBox6.Clear();
             textBox8.Clear();
             textBox5.Clear();
-            textBox4.Clear();
+            
 
             textBox2.Focus();
         }

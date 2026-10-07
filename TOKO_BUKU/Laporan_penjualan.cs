@@ -44,8 +44,17 @@ namespace TOKO_BUKU
                     string tglMulai = dateTimePicker1.Value.ToString("yyyy-MM-dd");
                     string tglSelesai = dateTimePicker2.Value.ToString("yyyy-MM-dd 23:59:59");
 
-                    //untuk menampilkan data tanggal (dari - sampai)
-                    string queryData = "SELECT * FROM transactions WHERE tanggal BETWEEN @tgl1 AND @tgl2";
+                    // tampilkan data transaksi beserta judul buku yang dibeli (gabungkan jika lebih dari satu)
+                    string queryData = @"
+                        SELECT t.*, 
+                               GROUP_CONCAT(b.judul SEPARATOR ', ') AS judul_buku
+                        FROM transactions t
+                        LEFT JOIN transaction_details td ON td.id_transaksi = t.id_transaksi
+                        LEFT JOIN books b ON td.id_buku = b.id_buku
+                        WHERE t.tanggal BETWEEN @tgl1 AND @tgl2
+                        GROUP BY t.id_transaksi
+                        ORDER BY t.tanggal DESC";
+
                     using (MySqlDataAdapter adapter = new MySqlDataAdapter(queryData, conn))
                     {
                         adapter.SelectCommand.Parameters.AddWithValue("@tgl1", tglMulai);
@@ -54,6 +63,11 @@ namespace TOKO_BUKU
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         dataGridView1.DataSource = dt;
+                        // ubah header kolom agar lebih mudah dibaca
+                        if (dataGridView1.Columns.Contains("judul_buku"))
+                        {
+                            dataGridView1.Columns["judul_buku"].HeaderText = "Judul Buku";
+                        }
                     }
                     //untuk mengjitung total transaksi 
                     string queryRingkasan = "SELECT COUNT(*), SUM(total_harga) FROM transactions WHERE tanggal BETWEEN @tgl1 AND @tgl2";
@@ -84,9 +98,7 @@ namespace TOKO_BUKU
             }
         }
 
-        // ==========================================================
-        // FUNGSI UNTUK MENAMPILKAN DETAIL TRANSAKSI SAAT TABEL DIKLIK
-        // ==========================================================
+
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -140,6 +152,23 @@ namespace TOKO_BUKU
                     chart1.Series.Clear();
                     chart1.Series.Add("Series1");
                 }
+                var series = chart1.Series["Series1"];
+                series.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+                series.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
+                series.IsValueShownAsLabel = true;
+                series.Label = "#VALY{N0}"; // show value formatted without decimals
+
+                var area = chart1.ChartAreas.Count > 0 ? chart1.ChartAreas[0] : null;
+                if (area != null)
+                {
+                    area.AxisX.Interval = 1;
+                    area.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Days;
+                    area.AxisX.LabelStyle.Format = "dd/MM/yyyy"; // show full date
+                    area.AxisX.LabelStyle.Angle = -45;
+                    area.AxisX.LabelStyle.IsEndLabelVisible = true;
+                    area.AxisY.LabelStyle.Format = "N0";
+                    area.AxisY.Title = "Total (Rp)";
+                }
                 //untuk menampilkan garfik data penjualan 
                 string queryGrafik = "SELECT tanggal, total_harga FROM transactions WHERE tanggal BETWEEN @tgl1 AND @tgl2 ORDER BY tanggal ASC";
                 using (MySqlCommand cmd = new MySqlCommand(queryGrafik, conn))
@@ -149,12 +178,13 @@ namespace TOKO_BUKU
 
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        chart1.Series["Series1"].Points.Clear();
+                        series.Points.Clear();
                         while (reader.Read())
                         {
-                            string tgl = Convert.ToDateTime(reader["tanggal"]).ToString("dd/MM");
-                            double harga = Convert.ToDouble(reader["total_harga"]);
-                            chart1.Series["Series1"].Points.AddXY(tgl, harga);
+                            DateTime tanggal = Convert.ToDateTime(reader["tanggal"]);
+                            double harga = reader.IsDBNull(reader.GetOrdinal("total_harga")) ? 0 : Convert.ToDouble(reader["total_harga"]);
+                            
+                            series.Points.AddXY(tanggal, harga);
                         }
                     }
                 }

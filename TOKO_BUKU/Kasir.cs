@@ -21,6 +21,7 @@ namespace TOKO_BUKU
             MuatDataBuku();
             AturPlaceholderCari();
 
+
             listBox1.DoubleClick += ListBox1_DoubleClick;
             label1.Click += (s, e) => PindahHalaman<Kasir>();
             label5.Click += (s, e) => PindahHalaman<Stock_buku>();
@@ -152,7 +153,10 @@ namespace TOKO_BUKU
 
             label8.Text = "Rp " + total.ToString("N0");
             label9.Text = "Rp " + total.ToString("N0");
+            
         }
+       
+        
 
         private void btnHapus_Click(object sender, EventArgs e)
         {
@@ -228,7 +232,11 @@ namespace TOKO_BUKU
                         cmdStok.Parameters.AddWithValue("@id_buku", row["id_buku"]);
                         cmdStok.ExecuteNonQuery();
                     }
-
+                    //saat tidak ada buku yang dibeli transasi mengirim pesan harus memilih buku untuk di beli
+                    if (keranjang.Rows.Count == 0)
+                    {
+                        throw new Exception("Tidak ada buku yang dibeli. Silakan pilih buku untuk dibeli.");
+                    }
                     trans.Commit();
 
                     string teksStruk = BuatTeksStruk(idTransaksiBaru, totalBelanja, uangBayar, kembalian);
@@ -240,6 +248,8 @@ namespace TOKO_BUKU
                     HitungTotalBelanja();
                     textBox1.Clear();
                     MuatDataBuku();
+                   
+
                 }
                 catch (Exception ex)
                 {

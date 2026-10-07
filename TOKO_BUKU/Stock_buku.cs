@@ -25,7 +25,7 @@ namespace TOKO_BUKU
 
             button1.Click += button1_Click;
             dataGridView1.CellClick += dataGridView1_CellClick;
-
+            
             label1.Click += label1_Click;
             label5.Click += label5_Click;
             button3.Click += button3_Click;
@@ -67,7 +67,7 @@ namespace TOKO_BUKU
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "UPDATE books SET stok = @stok WHERE kode_buku = @kode";
+                    string query = "UPDATE books SET stok = @stok + stok WHERE kode_buku = @kode";
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@stok", int.Parse(textBox3.Text));

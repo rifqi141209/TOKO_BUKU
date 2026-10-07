@@ -16,7 +16,7 @@ namespace TOKO_BUKU
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Kasir());
+            Application.Run(new Admin_dashboard());
         }
     }
 }
