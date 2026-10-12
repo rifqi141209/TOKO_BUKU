@@ -1,21 +1,14 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using TOKO_BUKU;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace TOKO_BUKU
 {
     public partial class Data_buku : Form
     {
-
         string connectionString = "server=localhost;database=TOKO_BUKU;uid=root;pwd=;";
 
         public Data_buku()
@@ -23,6 +16,7 @@ namespace TOKO_BUKU
             InitializeComponent();
             TampilData();
             AturPlaceholderCari();
+
             dataGridView1.CellClick += dataGridView1_CellClick;
             button3.Click += button3_Click;
         }
@@ -38,6 +32,27 @@ namespace TOKO_BUKU
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
                     dataGridView1.DataSource = dt;
+                    try
+                    {
+                        foreach (DataGridViewColumn col in dataGridView1.Columns)
+                        {
+                            col.HeaderText = col.Name.Replace("_", " ");
+                        }
+                    }
+                    catch { }
+                    
+                    try
+                    {
+                        var found = this.Controls.Find("Transaksi", true);
+                        if (found.Length > 0 && found[0] is DataGridView transaksi)
+                        {
+                            foreach (DataGridViewColumn col in transaksi.Columns)
+                            {
+                                col.HeaderText = col.Name.Replace("_", " ");
+                            }
+                        }
+                    }
+                    catch { }
                 }
             }
             catch (Exception ex)
@@ -48,18 +63,17 @@ namespace TOKO_BUKU
 
         private void BersihkanForm()
         {
-            textBox2.Clear();
-            textBox7.Clear();
-            textBox3.Clear();
+            textBox2.Clear(); 
+            textBox7.Clear(); 
+            textBox3.Clear(); 
             textBox6.Clear();
-            textBox8.Clear();
-            textBox5.Clear();
-            
+            textBox8.Clear(); 
+            textBox5.Clear(); 
 
             textBox2.Focus();
         }
 
-
+        // TOMBOL TAMBAH DATA
         private void button2_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(textBox7.Text) ||
@@ -67,6 +81,20 @@ namespace TOKO_BUKU
                 string.IsNullOrWhiteSpace(textBox8.Text) || string.IsNullOrWhiteSpace(textBox5.Text))
             {
                 MessageBox.Show("Data tidak boleh kosong.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!decimal.TryParse(textBox8.Text, out decimal hargaBuku))
+            {
+                MessageBox.Show("Kolom Harga harus diisi dengan angka yang valid!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox8.Focus();
+                return;
+            }
+
+            if (!int.TryParse(textBox5.Text, out int stokBuku))
+            {
+                MessageBox.Show("Kolom Stok harus diisi dengan angka bulat!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox5.Focus();
                 return;
             }
 
@@ -83,8 +111,10 @@ namespace TOKO_BUKU
                         cmd.Parameters.AddWithValue("@judul", textBox7.Text);
                         cmd.Parameters.AddWithValue("@pengarang", textBox3.Text);
                         cmd.Parameters.AddWithValue("@penerbit", textBox6.Text);
-                        cmd.Parameters.AddWithValue("@harga", decimal.Parse(textBox8.Text));
-                        cmd.Parameters.AddWithValue("@stok", int.Parse(textBox5.Text));
+
+                        // Gunakan variabel yang sudah divalidasi
+                        cmd.Parameters.AddWithValue("@harga", hargaBuku);
+                        cmd.Parameters.AddWithValue("@stok", stokBuku);
 
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Buku berhasil ditambahkan.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -99,11 +129,27 @@ namespace TOKO_BUKU
             }
         }
 
+        // TOMBOL UPDATE DATA
         private void button4_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(textBox2.Text))
             {
                 MessageBox.Show("Pilih data yang ingin di-update terlebih dahulu dari tabel!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Validasi input angka (Mencegah Crash jika diisi huruf)
+            if (!decimal.TryParse(textBox8.Text, out decimal hargaBuku))
+            {
+                MessageBox.Show("Kolom Harga harus diisi dengan angka yang valid!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox8.Focus();
+                return;
+            }
+
+            if (!int.TryParse(textBox5.Text, out int stokBuku))
+            {
+                MessageBox.Show("Kolom Stok harus diisi dengan angka bulat!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox5.Focus();
                 return;
             }
 
@@ -120,8 +166,10 @@ namespace TOKO_BUKU
                         cmd.Parameters.AddWithValue("@judul", textBox7.Text);
                         cmd.Parameters.AddWithValue("@pengarang", textBox3.Text);
                         cmd.Parameters.AddWithValue("@penerbit", textBox6.Text);
-                        cmd.Parameters.AddWithValue("@harga", decimal.Parse(textBox8.Text));
-                        cmd.Parameters.AddWithValue("@stok", int.Parse(textBox5.Text));
+
+                        // Gunakan variabel yang sudah divalidasi
+                        cmd.Parameters.AddWithValue("@harga", hargaBuku);
+                        cmd.Parameters.AddWithValue("@stok", stokBuku);
 
                         int baris = cmd.ExecuteNonQuery();
                         if (baris > 0)
@@ -143,6 +191,7 @@ namespace TOKO_BUKU
             }
         }
 
+        // TOMBOL HAPUS DATA
         private void button5_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(textBox2.Text))
@@ -176,7 +225,7 @@ namespace TOKO_BUKU
             }
         }
 
-
+        // TOMBOL CARI DATA
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -189,7 +238,6 @@ namespace TOKO_BUKU
 
                     if (string.IsNullOrEmpty(cari))
                     {
-                        
                         TampilData();
                         return;
                     }
@@ -209,6 +257,7 @@ namespace TOKO_BUKU
             }
         }
 
+        // FUNGSI PENGATURAN PLACEHOLDER
         private void AturPlaceholderCari()
         {
             textBox1.Text = "Cari Judul / Kode Buku.....";
@@ -247,7 +296,6 @@ namespace TOKO_BUKU
             }
         }
 
-
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -263,41 +311,57 @@ namespace TOKO_BUKU
             }
         }
 
-
-        private void PindahHalaman<T>() where T : Form, new()
+        private void PindahHalaman<T>(bool closeTopLevel = false) where T : Form, new()
         {
-            if (this is T) return;
-
-            T F = Application.OpenForms.OfType<T>().FirstOrDefault();
-            if (F == null)
+            var parent = Application.OpenForms.OfType<Admin_dashboard>().FirstOrDefault();
+            if (parent == null)
             {
-                F = new T();
-                F.StartPosition = FormStartPosition.CenterScreen;
+                if (this is T) return;
+                T F = Application.OpenForms.OfType<T>().FirstOrDefault();
+                if (F == null)
+                {
+                    F = new T();
+                    F.StartPosition = FormStartPosition.CenterScreen;
+                }
+                F.Show();
+                F.BringToFront();
+                this.Hide();
+                return;
             }
 
-            F.Show();
-            F.BringToFront();
-            this.Hide();
+            if (typeof(T) == typeof(Admin_dashboard))
+            {
+                parent.ShowDashboard();
+                if (this.TopLevel) { if (closeTopLevel) this.Close(); else this.Hide(); }
+                return;
+            }
+
+            parent.ShowChildForm(new T());
+            if (this.TopLevel) { if (closeTopLevel) this.Close(); else this.Hide(); }
         }
 
+        
         private void label1_Click(object sender, EventArgs e)
         {
-            PindahHalaman<Admin_dashboard>();
-
+            PindahHalaman<Admin_dashboard>(false);
         }
+
         private void label5_Click(object sender, EventArgs e)
         {
-            PindahHalaman<Data_buku>();
-        }
-        private void label6_Click(object sender, EventArgs e)
-        {
-            PindahHalaman<Laporan_penjualan>();
-        }
-        private void label7_Click(object sender, EventArgs e)
-        {
-            PindahHalaman<Backup>();
+            PindahHalaman<Data_buku>(false);
         }
 
+        private void label6_Click(object sender, EventArgs e)
+        {
+            PindahHalaman<Laporan_penjualan>(false);
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+            PindahHalaman<Backup>(false);
+        }
+
+     
         private void button3_Click(object sender, EventArgs e)
         {
             try

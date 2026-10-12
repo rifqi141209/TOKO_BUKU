@@ -55,6 +55,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.totalbuku = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.panelContent = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.Transaksi)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -154,13 +155,11 @@
             this.Transaksi.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Transaksi.Location = new System.Drawing.Point(187, 243);
             this.Transaksi.Name = "Transaksi";
-            this.Transaksi.Size = new System.Drawing.Size(601, 196);
+            this.Transaksi.Size = new System.Drawing.Size(597, 196);
             this.Transaksi.TabIndex = 25;
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.label6);
@@ -169,6 +168,7 @@
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.button3);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(170, 450);
@@ -211,7 +211,7 @@
             this.panel2.Controls.Add(this.panel3);
             this.panel2.Location = new System.Drawing.Point(187, 60);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(601, 169);
+            this.panel2.Size = new System.Drawing.Size(597, 169);
             this.panel2.TabIndex = 26;
             // 
             // panel6
@@ -221,7 +221,7 @@
             this.panel6.Controls.Add(this.pictureBox3);
             this.panel6.Controls.Add(this.total_stoc);
             this.panel6.Controls.Add(this.label15);
-            this.panel6.Location = new System.Drawing.Point(357, 11);
+            this.panel6.Location = new System.Drawing.Point(353, 11);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(218, 65);
             this.panel6.TabIndex = 26;
@@ -270,7 +270,7 @@
             this.panel5.Controls.Add(this.pictureBox4);
             this.panel5.Controls.Add(this.total_transaksi);
             this.panel5.Controls.Add(this.label13);
-            this.panel5.Location = new System.Drawing.Point(357, 90);
+            this.panel5.Location = new System.Drawing.Point(353, 90);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(218, 65);
             this.panel5.TabIndex = 26;
@@ -408,16 +408,26 @@
             this.label9.TabIndex = 24;
             this.label9.Text = "Total Buku";
             // 
+            // panelContent
+            // 
+            this.panelContent.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContent.Location = new System.Drawing.Point(0, 0);
+            this.panelContent.Name = "panelContent";
+            this.panelContent.Size = new System.Drawing.Size(796, 450);
+            this.panelContent.TabIndex = 28;
+            this.panelContent.Controls.Add(this.label11);
+            this.panelContent.Controls.Add(this.panel2);
+            this.panelContent.Controls.Add(this.Transaksi);
+            // 
             // Admin_dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.Transaksi);
+            this.ClientSize = new System.Drawing.Size(796, 450);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.label11);
+            this.Controls.Add(this.panelContent);
             this.Name = "Admin_dashboard";
             this.Text = "Admin_dashboard";
             ((System.ComponentModel.ISupportInitialize)(this.Transaksi)).EndInit();
@@ -454,6 +464,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panelContent;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.Label total_stoc;

@@ -44,6 +44,14 @@ namespace TOKO_BUKU
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         dataGridView1.DataSource = dt;
+                        try
+                        {
+                            foreach (DataGridViewColumn col in dataGridView1.Columns)
+                            {
+                                col.HeaderText = col.Name.Replace("_", " ");
+                            }
+                        }
+                        catch { }
                     }
                 }
             }
@@ -110,30 +118,43 @@ namespace TOKO_BUKU
         }
 
 
-        private void PindahHalaman<T>() where T : Form, new()
+        private void PindahHalaman<T>(bool closeTopLevel = false) where T : Form, new()
         {
-            if (this is T) return;
-
-            T targetForm = Application.OpenForms.OfType<T>().FirstOrDefault();
-            if (targetForm == null)
+            var parent = Application.OpenForms.OfType<Admin_dashboard>().FirstOrDefault();
+            if (parent == null)
             {
-                targetForm = new T();
-                targetForm.StartPosition = FormStartPosition.CenterScreen;
+                if (this is T) return;
+                T targetForm = Application.OpenForms.OfType<T>().FirstOrDefault();
+                if (targetForm == null)
+                {
+                    targetForm = new T();
+                    targetForm.StartPosition = FormStartPosition.CenterScreen;
+                }
+                targetForm.Show();
+                targetForm.BringToFront();
+                this.Hide();
+                return;
             }
 
-            targetForm.Show();
-            targetForm.BringToFront();
-            this.Hide();
+            if (typeof(T) == typeof(Admin_dashboard))
+            {
+                parent.ShowDashboard();
+                if (this.TopLevel) this.Hide();
+                return;
+            }
+
+            parent.ShowChildForm(new T());
+            if (this.TopLevel) this.Hide();
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-            PindahHalaman<Kasir>();
+            PindahHalaman<Kasir>(false);
         }
 
         private void label5_Click(object sender, EventArgs e)
         {
-            PindahHalaman<Stock_buku>();
+            PindahHalaman<Stock_buku>(false);
         }
 
         private void button3_Click(object sender, EventArgs e)

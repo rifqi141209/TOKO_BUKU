@@ -117,24 +117,39 @@ namespace TOKO_BUKU
             }
         }
 
-        private void PindahHalaman<T>() where T : Form, new()
+        private void PindahHalaman<T>(bool closeTopLevel = false) where T : Form, new()
         {
-            if (this is T) return;
-            T F = Application.OpenForms.OfType<T>().FirstOrDefault();
-            if (F == null)
+            var parent = Application.OpenForms.OfType<Admin_dashboard>().FirstOrDefault();
+            if (parent == null)
             {
-                F = new T();
-                F.StartPosition = FormStartPosition.CenterScreen;
+                if (this is T) return;
+                T F = Application.OpenForms.OfType<T>().FirstOrDefault();
+                if (F == null)
+                {
+                    F = new T();
+                    F.StartPosition = FormStartPosition.CenterScreen;
+                }
+                F.Show();
+                F.BringToFront();
+                this.Hide();
+                return;
             }
-            F.Show();
-            F.BringToFront();
-            this.Hide();
+
+            if (typeof(T) == typeof(Admin_dashboard))
+            {
+                parent.ShowDashboard();
+                if (this.TopLevel) { if (closeTopLevel) this.Close(); else this.Hide(); }
+                return;
+            }
+
+            parent.ShowChildForm(new T());
+            if (this.TopLevel) { if (closeTopLevel) this.Close(); else this.Hide(); }
         }
 
-        private void label1_Click(object sender, EventArgs e) { PindahHalaman<Admin_dashboard>(); }
-        private void label5_Click(object sender, EventArgs e) { PindahHalaman<Data_buku>(); }
-        private void label6_Click(object sender, EventArgs e) { PindahHalaman<Laporan_penjualan>(); }
-        private void label7_Click(object sender, EventArgs e) { PindahHalaman<Backup>(); }
+        private void label1_Click(object sender, EventArgs e) { PindahHalaman<Admin_dashboard>(false); }
+        private void label5_Click(object sender, EventArgs e) { PindahHalaman<Data_buku>(false); }
+        private void label6_Click(object sender, EventArgs e) { PindahHalaman<Laporan_penjualan>(false); }
+        private void label7_Click(object sender, EventArgs e) { PindahHalaman<Backup>(false); }
 
         // Tombol Logout
         private void button3_Click(object sender, EventArgs e)
@@ -156,7 +171,11 @@ namespace TOKO_BUKU
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
-            Application.Exit();
+
+            if (Application.OpenForms.Count == 0)
+            {
+                Application.Exit();
+            }
         }
     }
 }

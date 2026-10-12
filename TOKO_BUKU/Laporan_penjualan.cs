@@ -1,21 +1,14 @@
-﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
-using TOKO_BUKU;
+using MySql.Data.MySqlClient;
 
 namespace TOKO_BUKU
 {
     public partial class Laporan_penjualan : Form
     {
-        string connectionString = "server=localhost;database=TOKO_BUKU;uid=root;pwd=;";
+        private readonly string connectionString = "server=localhost;database=TOKO_BUKU;uid=root;pwd=;";
 
         public Laporan_penjualan()
         {
@@ -44,7 +37,6 @@ namespace TOKO_BUKU
                     string tglMulai = dateTimePicker1.Value.ToString("yyyy-MM-dd");
                     string tglSelesai = dateTimePicker2.Value.ToString("yyyy-MM-dd 23:59:59");
 
-                    // tampilkan data transaksi beserta judul buku yang dibeli (gabungkan jika lebih dari satu)
                     string queryData = @"
                         SELECT t.*, 
                                GROUP_CONCAT(b.judul SEPARATOR ', ') AS judul_buku
@@ -56,20 +48,32 @@ namespace TOKO_BUKU
                         ORDER BY t.tanggal DESC";
 
                     using (MySqlDataAdapter adapter = new MySqlDataAdapter(queryData, conn))
+                    using (DataTable dt = new DataTable())
                     {
                         adapter.SelectCommand.Parameters.AddWithValue("@tgl1", tglMulai);
                         adapter.SelectCommand.Parameters.AddWithValue("@tgl2", tglSelesai);
 
-                        DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         dataGridView1.DataSource = dt;
-                        // ubah header kolom agar lebih mudah dibaca
-                        if (dataGridView1.Columns.Contains("judul_buku"))
+
+                        if (dataGridView1.Columns.Count > 0)
+                        {
+                            foreach (DataGridViewColumn col in dataGridView1.Columns)
+                            {
+                                col.HeaderText = col.Name.Replace("_", " ");
+                            }
+                        }
+
+                        if (dataGridView1.Columns.Contains("judul buku"))
+                        {
+                            dataGridView1.Columns["judul buku"].HeaderText = "Judul Buku";
+                        }
+                        else if (dataGridView1.Columns.Contains("judul_buku"))
                         {
                             dataGridView1.Columns["judul_buku"].HeaderText = "Judul Buku";
                         }
                     }
-                    //untuk mengjitung total transaksi 
+
                     string queryRingkasan = "SELECT COUNT(*), SUM(total_harga) FROM transactions WHERE tanggal BETWEEN @tgl1 AND @tgl2";
                     using (MySqlCommand cmd = new MySqlCommand(queryRingkasan, conn))
                     {
@@ -98,14 +102,12 @@ namespace TOKO_BUKU
             }
         }
 
-
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
 
-                // Pastikan nama kolom 'id_transaksi' sesuai dengan struktur database Anda
                 if (row.Cells["id_transaksi"].Value != null)
                 {
                     string idTransaksi = row.Cells["id_transaksi"].Value.ToString();
@@ -121,19 +123,17 @@ namespace TOKO_BUKU
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    //untuk menampilkan data detail transaksi berdasarkan taggal awal dan sampai nya
+
                     string query = @"SELECT td.id_detail, b.kode_buku, b.judul, td.jumlah, td.subtotal 
                                      FROM transaction_details td 
                                      JOIN books b ON td.id_buku = b.id_buku 
                                      WHERE td.id_transaksi = @id";
 
                     using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn))
+                    using (DataTable dt = new DataTable())
                     {
                         adapter.SelectCommand.Parameters.AddWithValue("@id", idTransaksi);
-                        DataTable dt = new DataTable();
                         adapter.Fill(dt);
-
-                        //dataGridView.DataSource = dt;
                     }
                 }
             }
@@ -147,30 +147,38 @@ namespace TOKO_BUKU
         {
             try
             {
-                if (chart1.Series.IndexOf("Series1") == -1)
-                {
-                    chart1.Series.Clear();
-                    chart1.Series.Add("Series1");
-                }
-                var series = chart1.Series["Series1"];
+                chart1.Series.Clear();
+                var series = chart1.Series.Add("Series1");
+
                 series.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
                 series.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
                 series.IsValueShownAsLabel = true;
-                series.Label = "#VALY{N0}"; // show value formatted without decimals
+                series.Label = "#VALY{N0}";
 
                 var area = chart1.ChartAreas.Count > 0 ? chart1.ChartAreas[0] : null;
                 if (area != null)
                 {
                     area.AxisX.Interval = 1;
                     area.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Days;
-                    area.AxisX.LabelStyle.Format = "dd/MM/yyyy"; // show full date
+                    area.AxisX.LabelStyle.Format = "dd/MM/yyyy";
                     area.AxisX.LabelStyle.Angle = -45;
                     area.AxisX.LabelStyle.IsEndLabelVisible = true;
+
+                    area.AxisX.MajorGrid.Enabled = false;
+
                     area.AxisY.LabelStyle.Format = "N0";
                     area.AxisY.Title = "Total (Rp)";
                 }
-                //untuk menampilkan garfik data penjualan 
-                string queryGrafik = "SELECT tanggal, total_harga FROM transactions WHERE tanggal BETWEEN @tgl1 AND @tgl2 ORDER BY tanggal ASC";
+
+                string queryGrafik = @"
+            SELECT 
+                DATE(tanggal) AS tgl_harian, 
+                SUM(total_harga) AS total_harian 
+            FROM transactions 
+            WHERE DATE(tanggal) BETWEEN @tgl1 AND @tgl2 
+            GROUP BY DATE(tanggal) 
+            ORDER BY DATE(tanggal) ASC";
+
                 using (MySqlCommand cmd = new MySqlCommand(queryGrafik, conn))
                 {
                     cmd.Parameters.AddWithValue("@tgl1", tgl1);
@@ -179,19 +187,21 @@ namespace TOKO_BUKU
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         series.Points.Clear();
+
                         while (reader.Read())
                         {
-                            DateTime tanggal = Convert.ToDateTime(reader["tanggal"]);
-                            double harga = reader.IsDBNull(reader.GetOrdinal("total_harga")) ? 0 : Convert.ToDouble(reader["total_harga"]);
-                            
+                            DateTime tanggal = Convert.ToDateTime(reader["tgl_harian"]);
+                            double harga = reader.IsDBNull(reader.GetOrdinal("total_harian"))
+                                           ? 0 : Convert.ToDouble(reader["total_harian"]);
+
                             series.Points.AddXY(tanggal, harga);
                         }
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                MessageBox.Show("Gagal memuat grafik: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -200,38 +210,47 @@ namespace TOKO_BUKU
             TampilkanLaporan();
         }
 
-        private void PindahHalaman<T>() where T : Form, new()
+        private void PindahHalaman<T>(bool closeTopLevel = false) where T : Form, new()
         {
-            if (this is T) return;
-
-            T F = Application.OpenForms.OfType<T>().FirstOrDefault();
-            if (F == null)
+            var parent = Application.OpenForms.OfType<Admin_dashboard>().FirstOrDefault();
+            if (parent == null)
             {
-                F = new T();
-                F.StartPosition = FormStartPosition.CenterScreen;
+                if (this is T) return;
+                T F = Application.OpenForms.OfType<T>().FirstOrDefault();
+                if (F == null)
+                {
+                    F = new T();
+                    F.StartPosition = FormStartPosition.CenterScreen;
+                }
+                F.Show();
+                F.BringToFront();
+                this.Hide();
+                return;
             }
 
-            F.Show();
-            F.BringToFront();
-            this.Hide();
+            if (typeof(T) == typeof(Admin_dashboard))
+            {
+                parent.ShowDashboard();
+                if (this.TopLevel)
+                {
+                    if (closeTopLevel) this.Close();
+                    else this.Hide();
+                }
+                return;
+            }
+
+            parent.ShowChildForm(new T());
+            if (this.TopLevel)
+            {
+                if (closeTopLevel) this.Close();
+                else this.Hide();
+            }
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-            PindahHalaman<Admin_dashboard>();
-        }
-        private void label5_Click(object sender, EventArgs e)
-        {
-            PindahHalaman<Data_buku>();
-        }
-        private void label6_Click(object sender, EventArgs e)
-        {
-            PindahHalaman<Laporan_penjualan>();
-        }
-        private void label7_Click(object sender, EventArgs e)
-        {
-            PindahHalaman<Backup>();
-        }
+        private void label1_Click(object sender, EventArgs e) => PindahHalaman<Admin_dashboard>(false);
+        private void label5_Click(object sender, EventArgs e) => PindahHalaman<Data_buku>(false);
+        private void label6_Click(object sender, EventArgs e) => PindahHalaman<Laporan_penjualan>(false);
+        private void label7_Click(object sender, EventArgs e) => PindahHalaman<Backup>(false);
 
         private void button3_Click(object sender, EventArgs e)
         {
