@@ -332,5 +332,18 @@ namespace TOKO_BUKU
                 MessageBox.Show("error bosqu " + ex.Message);
             }
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            //hapus data dari keranjang
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+                {
+                    dataGridView1.Rows.RemoveAt(row.Index);
+                }
+                HitungTotalBelanja();
+            }
+        }
     }
 }
