@@ -266,5 +266,10 @@ namespace TOKO_BUKU
                 MessageBox.Show("Tidak Bisa Logout: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Laporan_penjualan_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

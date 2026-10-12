@@ -87,6 +87,7 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(202, 259);
             this.dataGridView1.Name = "dataGridView1";
@@ -169,7 +170,7 @@
             // 
             // panel4
             // 
-            this.panel4.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel4.BackColor = System.Drawing.Color.Lime;
             this.panel4.Controls.Add(this.label13);
             this.panel4.Controls.Add(this.label10);
             this.panel4.Location = new System.Drawing.Point(20, 91);
@@ -203,7 +204,7 @@
             // 
             // panel3
             // 
-            this.panel3.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel3.BackColor = System.Drawing.Color.Yellow;
             this.panel3.Controls.Add(this.label12);
             this.panel3.Controls.Add(this.label9);
             this.panel3.Location = new System.Drawing.Point(20, 17);
@@ -316,6 +317,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label11);
@@ -327,6 +329,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "Laporan_penjualan";
             this.Text = "Laporan_penjualan";
+            this.Load += new System.EventHandler(this.Laporan_penjualan_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();

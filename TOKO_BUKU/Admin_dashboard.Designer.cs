@@ -67,6 +67,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panelContent.SuspendLayout();
             this.SuspendLayout();
             // 
             // label2
@@ -204,7 +205,7 @@
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.panel2.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.panel2.Controls.Add(this.panel6);
             this.panel2.Controls.Add(this.panel5);
             this.panel2.Controls.Add(this.panel4);
@@ -243,7 +244,7 @@
             this.total_stoc.AutoSize = true;
             this.total_stoc.BackColor = System.Drawing.Color.Transparent;
             this.total_stoc.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.total_stoc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
+            this.total_stoc.ForeColor = System.Drawing.Color.Lime;
             this.total_stoc.Location = new System.Drawing.Point(22, 23);
             this.total_stoc.Name = "total_stoc";
             this.total_stoc.Size = new System.Drawing.Size(21, 24);
@@ -292,7 +293,7 @@
             this.total_transaksi.AutoSize = true;
             this.total_transaksi.BackColor = System.Drawing.Color.Transparent;
             this.total_transaksi.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.total_transaksi.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
+            this.total_transaksi.ForeColor = System.Drawing.Color.Lime;
             this.total_transaksi.Location = new System.Drawing.Point(22, 23);
             this.total_transaksi.Name = "total_transaksi";
             this.total_transaksi.Size = new System.Drawing.Size(21, 24);
@@ -340,7 +341,7 @@
             this.penjualan.AutoSize = true;
             this.penjualan.BackColor = System.Drawing.Color.Transparent;
             this.penjualan.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.penjualan.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
+            this.penjualan.ForeColor = System.Drawing.Color.Lime;
             this.penjualan.Location = new System.Drawing.Point(8, 23);
             this.penjualan.Name = "penjualan";
             this.penjualan.Size = new System.Drawing.Size(21, 24);
@@ -388,7 +389,7 @@
             this.totalbuku.AutoSize = true;
             this.totalbuku.BackColor = System.Drawing.Color.Transparent;
             this.totalbuku.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.totalbuku.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
+            this.totalbuku.ForeColor = System.Drawing.Color.Lime;
             this.totalbuku.Location = new System.Drawing.Point(22, 23);
             this.totalbuku.Name = "totalbuku";
             this.totalbuku.Size = new System.Drawing.Size(21, 24);
@@ -411,14 +412,14 @@
             // panelContent
             // 
             this.panelContent.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panelContent.Controls.Add(this.label11);
+            this.panelContent.Controls.Add(this.panel2);
+            this.panelContent.Controls.Add(this.Transaksi);
             this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelContent.Location = new System.Drawing.Point(0, 0);
             this.panelContent.Name = "panelContent";
             this.panelContent.Size = new System.Drawing.Size(796, 450);
             this.panelContent.TabIndex = 28;
-            this.panelContent.Controls.Add(this.label11);
-            this.panelContent.Controls.Add(this.panel2);
-            this.panelContent.Controls.Add(this.Transaksi);
             // 
             // Admin_dashboard
             // 
@@ -446,8 +447,9 @@
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panelContent.ResumeLayout(false);
+            this.panelContent.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

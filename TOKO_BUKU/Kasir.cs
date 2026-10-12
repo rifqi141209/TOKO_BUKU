@@ -49,9 +49,7 @@ namespace TOKO_BUKU
             keranjang.Columns.Add("judul", typeof(string));
             keranjang.Columns.Add("harga", typeof(decimal));
             keranjang.Columns.Add("jumlah", typeof(int));
-            // diskon: percentage stored in books table (e.g., 10 means 10%)
             keranjang.Columns.Add("diskon", typeof(decimal));
-            // diskon_total: absolute discount amount for the row (jumlah * harga * diskon/100)
             keranjang.Columns.Add("diskon_total", typeof(decimal));
             keranjang.Columns.Add("subtotal", typeof(decimal));
 
@@ -154,9 +152,10 @@ namespace TOKO_BUKU
                                 }
                         int newJumlah = jmlLama + 1;
                         adaDiKeranjang[0]["jumlah"] = newJumlah;
-                        // compute discount amount and subtotal
+
+                        
                         decimal diskonTotal = newJumlah * harga * diskon / 100m;
-                        decimal subtotal = newJumlah * (harga - (harga * diskon / 100m));
+                        decimal subtotal = newJumlah * harga;
                         adaDiKeranjang[0]["diskon"] = diskon;
                         adaDiKeranjang[0]["diskon_total"] = diskonTotal;
                         adaDiKeranjang[0]["subtotal"] = subtotal;
@@ -164,7 +163,7 @@ namespace TOKO_BUKU
                             else
                             {
                         decimal diskonTotal = 1 * harga * diskon / 100m;
-                        decimal subtotal = 1 * (harga - (harga * diskon / 100m));
+                        decimal subtotal = 1 * harga;
                         keranjang.Rows.Add(reader.GetInt32("id_buku"), kode, reader.GetString("judul"), harga, 1, diskon, diskonTotal, subtotal);
                             }
                             HitungTotalBelanja();
@@ -177,18 +176,32 @@ namespace TOKO_BUKU
 
         private void HitungTotalBelanja()
         {
-            totalBelanjaAktif = 0;
-            totalDiskonAktif = 0;
+           
+            decimal sumSubtotal = 0m;
+            totalDiskonAktif = 0m;
             foreach (DataRow row in keranjang.Rows)
             {
-                totalBelanjaAktif += Convert.ToDecimal(row["subtotal"]);
-                try { totalDiskonAktif += row.Table.Columns.Contains("diskon_total") ? Convert.ToDecimal(row["diskon_total"]) : 0m; } catch { }
+                try
+                {
+                    
+                    sumSubtotal += row.Table.Columns.Contains("subtotal") ? Convert.ToDecimal(row["subtotal"]) : 0m;
+                    totalDiskonAktif += row.Table.Columns.Contains("diskon_total") ? Convert.ToDecimal(row["diskon_total"]) : 0m;
+                }
+                catch { }
             }
 
-            label8.Text = "Rp " + totalBelanjaAktif.ToString("N0");
-            label9.Text = "Rp " + totalBelanjaAktif.ToString("N0");
-            // show total diskon in label12
-            try { label12.Text = "Rp " + totalDiskonAktif.ToString("N0"); } catch { label12.Text = "Rp 0"; }
+            totalBelanjaAktif = sumSubtotal - totalDiskonAktif;
+            try
+            {
+              
+                label8.Text = "Rp " + sumSubtotal.ToString("N0");
+                label12.Text = "Rp " + totalDiskonAktif.ToString("N0");
+                label9.Text = "Rp " + totalBelanjaAktif.ToString("N0");
+            }
+            catch
+            {
+                
+            }
         }
 
         private void btnHapus_Click(object sender, EventArgs e)
@@ -221,10 +234,11 @@ namespace TOKO_BUKU
                 decimal harga = Convert.ToDecimal(row.Cells["harga"].Value);
                 int jumlah = Convert.ToInt32(row.Cells["jumlah"].Value);
                 decimal diskon = 0m;
-                try { diskon = row.Cells["diskon"] != null && row.Cells["diskon"].Value != null ? Convert.ToDecimal(row.Cells["diskon"].Value) : 0m; } catch { diskon = 0m; }
-
+                try { diskon = row.Cells["diskon"] != null && row.Cells["diskon"].Value != null ?
+                        Convert.ToDecimal(row.Cells["diskon"].Value) : 0m; } 
+                catch { diskon = 0m; }
                 decimal diskonTotal = jumlah * harga * diskon / 100m;
-                decimal subtotal = jumlah * (harga - (harga * diskon / 100m));
+                decimal subtotal = jumlah * harga;
 
                 row.Cells["diskon_total"].Value = diskonTotal;
                 row.Cells["subtotal"].Value = subtotal;
@@ -388,7 +402,6 @@ namespace TOKO_BUKU
                 child.TopLevel = false;
                 child.FormBorderStyle = FormBorderStyle.None;
                 child.StartPosition = FormStartPosition.Manual;
-                // make the child fill the content panel instead of centering it
                 child.Dock = DockStyle.Fill;
 
                 panelContent.Controls.Add(child);
@@ -427,7 +440,7 @@ namespace TOKO_BUKU
 
         private void CenterChildInPanel(Form child)
         {
-            // legacy helper kept for compatibility: ensure child docks to fill panel
+           
             if (child == null) return;
             child.Dock = DockStyle.Fill;
         }
