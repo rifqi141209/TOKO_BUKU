@@ -69,6 +69,8 @@ namespace TOKO_BUKU
             textBox6.Clear();
             textBox8.Clear(); 
             textBox5.Clear(); 
+            // clear diskon field
+            textBox4.Clear();
 
             textBox2.Focus();
         }
@@ -98,13 +100,25 @@ namespace TOKO_BUKU
                 return;
             }
 
+            // Diskon (optional) - parse if provided, default to 0
+            decimal diskonBuku = 0m;
+            if (!string.IsNullOrWhiteSpace(textBox4.Text))
+            {
+                if (!decimal.TryParse(textBox4.Text, out diskonBuku))
+                {
+                    MessageBox.Show("Kolom Diskon harus diisi dengan angka (mis. 10 untuk 10%)!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    textBox4.Focus();
+                    return;
+                }
+            }
+
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "INSERT INTO books (kode_buku, judul, pengarang, penerbit, harga, stok) " +
-                                   "VALUES (@kode, @judul, @pengarang, @penerbit, @harga, @stok)";
+                    string query = "INSERT INTO books (kode_buku, judul, pengarang, penerbit, harga, stok, diskon) " +
+                                   "VALUES (@kode, @judul, @pengarang, @penerbit, @harga, @stok, @diskon)";
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@kode", textBox2.Text);
@@ -115,6 +129,7 @@ namespace TOKO_BUKU
                         // Gunakan variabel yang sudah divalidasi
                         cmd.Parameters.AddWithValue("@harga", hargaBuku);
                         cmd.Parameters.AddWithValue("@stok", stokBuku);
+                        cmd.Parameters.AddWithValue("@diskon", diskonBuku);
 
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Buku berhasil ditambahkan.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -153,12 +168,24 @@ namespace TOKO_BUKU
                 return;
             }
 
+            // Diskon (optional) - parse if provided, default to 0
+            decimal diskonBuku = 0m;
+            if (!string.IsNullOrWhiteSpace(textBox4.Text))
+            {
+                if (!decimal.TryParse(textBox4.Text, out diskonBuku))
+                {
+                    MessageBox.Show("Kolom Diskon harus diisi dengan angka (mis. 10 untuk 10%)!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    textBox4.Focus();
+                    return;
+                }
+            }
+
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "UPDATE books SET judul=@judul, pengarang=@pengarang, penerbit=@penerbit, harga=@harga, stok=@stok " +
+                    string query = "UPDATE books SET judul=@judul, pengarang=@pengarang, penerbit=@penerbit, harga=@harga, stok=@stok, diskon=@diskon " +
                                    "WHERE kode_buku=@kode";
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
@@ -170,6 +197,7 @@ namespace TOKO_BUKU
                         // Gunakan variabel yang sudah divalidasi
                         cmd.Parameters.AddWithValue("@harga", hargaBuku);
                         cmd.Parameters.AddWithValue("@stok", stokBuku);
+                        cmd.Parameters.AddWithValue("@diskon", diskonBuku);
 
                         int baris = cmd.ExecuteNonQuery();
                         if (baris > 0)
@@ -308,6 +336,13 @@ namespace TOKO_BUKU
                 textBox6.Text = baris.Cells["penerbit"].Value.ToString();
                 textBox8.Text = baris.Cells["harga"].Value.ToString();
                 textBox5.Text = baris.Cells["stok"].Value.ToString();
+                // set diskon if present
+                try
+                {
+                    var diskCell = baris.Cells["diskon"].Value;
+                    textBox4.Text = diskCell != null ? diskCell.ToString() : "";
+                }
+                catch { textBox4.Text = ""; }
             }
         }
 

@@ -25,7 +25,7 @@ namespace TOKO_BUKU
 
             button1.Click += button1_Click;
             dataGridView1.CellClick += dataGridView1_CellClick;
-            
+
             label1.Click += label1_Click;
             label5.Click += label5_Click;
             button3.Click += button3_Click;
@@ -61,7 +61,6 @@ namespace TOKO_BUKU
             }
         }
 
-
         private void button1_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(textBox3.Text))
@@ -75,7 +74,8 @@ namespace TOKO_BUKU
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "UPDATE books SET stok = @stok + stok WHERE kode_buku = @kode";
+                    // Menambahkan stok lama dengan stok inputan baru
+                    string query = "UPDATE books SET stok = stok + @stok WHERE kode_buku = @kode";
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@stok", int.Parse(textBox3.Text));
@@ -102,7 +102,6 @@ namespace TOKO_BUKU
             }
         }
 
-
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -117,44 +116,47 @@ namespace TOKO_BUKU
             }
         }
 
+        
 
-        private void PindahHalaman<T>(bool closeTopLevel = false) where T : Form, new()
+        private void PindahHalaman<T>() where T : Form, new()
         {
-            var parent = Application.OpenForms.OfType<Admin_dashboard>().FirstOrDefault();
-            if (parent == null)
+            // Mencari Form Kasir yang sedang menjadi Parent / Host
+            var parent = Application.OpenForms.OfType<Kasir>().FirstOrDefault();
+
+            if (parent != null)
             {
-                if (this is T) return;
-                T targetForm = Application.OpenForms.OfType<T>().FirstOrDefault();
-                if (targetForm == null)
+                if (typeof(T) == typeof(Kasir))
                 {
-                    targetForm = new T();
-                    targetForm.StartPosition = FormStartPosition.CenterScreen;
+                    // Jika klik Kasir, kembalikan tampilan utama Kasir
+                    parent.ShowKasirDashboard();
                 }
-                targetForm.Show();
-                targetForm.BringToFront();
-                this.Hide();
-                return;
+                else
+                {
+                    // Jika pindah ke form lain (opsional jika ada form ke-3)
+                    parent.ShowChildForm(new T());
+                }
             }
-
-            if (typeof(T) == typeof(Admin_dashboard))
+            else
             {
-                parent.ShowDashboard();
-                if (this.TopLevel) this.Hide();
-                return;
+                // Fallback jika Stock_buku dijalankan secara mandiri (bukan di dalam panel)
+                if (this is T) return;
+                T targetForm = new T();
+                targetForm.StartPosition = FormStartPosition.CenterScreen;
+                targetForm.Show();
+                this.Hide();
             }
-
-            parent.ShowChildForm(new T());
-            if (this.TopLevel) this.Hide();
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-            PindahHalaman<Kasir>(false);
+            // Tombol ke Kasir
+            PindahHalaman<Kasir>();
         }
 
         private void label5_Click(object sender, EventArgs e)
         {
-            PindahHalaman<Stock_buku>(false);
+            // Tombol ke Stock (Refresh dirinya sendiri)
+            PindahHalaman<Stock_buku>();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -164,7 +166,17 @@ namespace TOKO_BUKU
                 var login = new Login();
                 login.StartPosition = FormStartPosition.CenterScreen;
                 login.Show();
-                this.Hide();
+
+                // Jika form ini ada di dalam Kasir, kita harus menutup Form Kasir-nya (induknya)
+                var parent = Application.OpenForms.OfType<Kasir>().FirstOrDefault();
+                if (parent != null)
+                {
+                    parent.Hide();
+                }
+                else
+                {
+                    this.Hide();
+                }
             }
             catch (Exception ex)
             {

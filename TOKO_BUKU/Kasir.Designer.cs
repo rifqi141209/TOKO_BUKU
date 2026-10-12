@@ -57,6 +57,8 @@
             this.panel7.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel8.SuspendLayout();
+            this.panelContent = new System.Windows.Forms.Panel();
+            this.panelUtamaKasir = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -183,6 +185,22 @@
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(317, 403);
             this.panel7.TabIndex = 22;
+            // 
+            // panelContent
+            // 
+            this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContent.Location = new System.Drawing.Point(170, 0);
+            this.panelContent.Name = "panelContent";
+            this.panelContent.Size = new System.Drawing.Size(630, 450);
+            this.panelContent.TabIndex = 26;
+            // 
+            // panelUtamaKasir
+            // 
+            this.panelUtamaKasir.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelUtamaKasir.Location = new System.Drawing.Point(0, 0);
+            this.panelUtamaKasir.Name = "panelUtamaKasir";
+            this.panelUtamaKasir.Size = new System.Drawing.Size(630, 450);
+            this.panelUtamaKasir.TabIndex = 27;
             // 
             // button2
             // 
@@ -339,10 +357,16 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label14);
+            // add controls: left panel, then content panel which hosts the kasir panels
+            // move label14 into panelContent so it stays visible above inner panels
+            this.panelContent.Controls.Add(this.label14);
+            // put existing UI panels inside panelUtamaKasir
+            this.panelUtamaKasir.Controls.Add(this.panel7);
+            this.panelUtamaKasir.Controls.Add(this.panel8);
+            this.panelContent.Controls.Add(this.panelUtamaKasir);
+
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.panel7);
-            this.Controls.Add(this.panel8);
+            this.Controls.Add(this.panelContent);
             this.Name = "Kasir";
             this.Text = "Kasir";
             this.panel1.ResumeLayout(false);
@@ -385,5 +409,7 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Panel panelContent;
+        private System.Windows.Forms.Panel panelUtamaKasir;
     }
 }

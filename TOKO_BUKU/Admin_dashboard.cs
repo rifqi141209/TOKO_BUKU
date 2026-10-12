@@ -17,6 +17,7 @@ namespace TOKO_BUKU
             InitializeComponent();
             MuatStatistikDashboard();
             MuatTabelTransaksi();
+            this.StartPosition = FormStartPosition.CenterScreen;
 
             label1.Click += label1_Click;
             label5.Click += label5_Click;
@@ -28,7 +29,8 @@ namespace TOKO_BUKU
             {
                 if (currentChild != null)
                 {
-                    CenterChildInPanel(currentChild);
+                    // ensure child fills the panel when resized
+                    currentChild.Dock = DockStyle.Fill;
                 }
             };
         }
@@ -154,6 +156,8 @@ namespace TOKO_BUKU
                 child.TopLevel = false;
                 child.FormBorderStyle = FormBorderStyle.None;
                 child.StartPosition = FormStartPosition.Manual;
+                // make child fill the panel instead of centering it
+                child.Dock = DockStyle.Fill;
 
                 panelContent.Controls.Add(child);
                 currentChild = child;
@@ -164,7 +168,7 @@ namespace TOKO_BUKU
                     child.Size = new Size(Math.Max(600, panelContent.ClientSize.Width - 40), Math.Max(300, panelContent.ClientSize.Height - 40));
                 }
 
-                CenterChildInPanel(child);
+                // child will fill the panel; no centering needed
                 child.Show();
 
                 var side = child.Controls.Find("panel1", true).FirstOrDefault();
@@ -194,11 +198,9 @@ namespace TOKO_BUKU
 
         private void CenterChildInPanel(Form child)
         {
-            if (child == null || panelContent == null) return;
-
-            int x = Math.Max(0, (panelContent.ClientSize.Width - child.Width) / 2);
-            int y = Math.Max(0, (panelContent.ClientSize.Height - child.Height) / 2);
-            child.Location = new Point(x, y);
+            // legacy helper kept for compatibility: ensure child docks to fill panel
+            if (child == null) return;
+            child.Dock = DockStyle.Fill;
         }
 
         public void ShowDashboard()
@@ -207,6 +209,7 @@ namespace TOKO_BUKU
             {
                 if (currentChild != null)
                 {
+                    
                     currentChild.Close();
                     currentChild.Dispose();
                     panelContent.Controls.Remove(currentChild);

@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -11,21 +12,34 @@ namespace TOKO_BUKU
     {
         string connectionString = "server=localhost;database=TOKO_BUKU;uid=root;pwd=;";
         DataTable keranjang = new DataTable();
-        
-      
         decimal totalBelanjaAktif = 0;
+        decimal totalDiskonAktif = 0;
+
+
+        private Form currentChild = null;
 
         public Kasir()
         {
             InitializeComponent();
-
+            this.StartPosition = FormStartPosition.CenterScreen;
             AturKeranjang();
             MuatDataBuku();
             AturPlaceholderCari();
 
             listBox1.DoubleClick += ListBox1_DoubleClick;
-            label1.Click += (s, e) => PindahHalaman<Kasir>(false);
-            label5.Click += (s, e) => PindahHalaman<Stock_buku>(false);
+
+            
+            label1.Click += (s, e) => PindahHalaman<Kasir>();
+            label5.Click += (s, e) => PindahHalaman<Stock_buku>();
+
+   
+            this.Resize += (s, e) =>
+            {
+                if (currentChild != null && panelContent != null)
+                {
+                    currentChild.Dock = DockStyle.Fill;
+                }
+            };
         }
 
         private void AturKeranjang()
@@ -35,6 +49,10 @@ namespace TOKO_BUKU
             keranjang.Columns.Add("judul", typeof(string));
             keranjang.Columns.Add("harga", typeof(decimal));
             keranjang.Columns.Add("jumlah", typeof(int));
+            // diskon: percentage stored in books table (e.g., 10 means 10%)
+            keranjang.Columns.Add("diskon", typeof(decimal));
+            // diskon_total: absolute discount amount for the row (jumlah * harga * diskon/100)
+            keranjang.Columns.Add("diskon_total", typeof(decimal));
             keranjang.Columns.Add("subtotal", typeof(decimal));
 
             dataGridView1.DataSource = keranjang;
@@ -123,6 +141,8 @@ namespace TOKO_BUKU
 
                             string kode = reader.GetString("kode_buku");
                             decimal harga = reader.GetDecimal("harga");
+                    decimal diskon = 0m;
+                    try { diskon = reader["diskon"] != DBNull.Value ? Convert.ToDecimal(reader["diskon"]) : 0m; } catch { diskon = 0m; }
 
                             DataRow[] adaDiKeranjang = keranjang.Select($"kode_buku = '{kode}'");
                             if (adaDiKeranjang.Length > 0)
@@ -132,12 +152,20 @@ namespace TOKO_BUKU
                                 {
                                     MessageBox.Show("Jumlah melebihi stok tersedia!"); return;
                                 }
-                                adaDiKeranjang[0]["jumlah"] = jmlLama + 1;
-                                adaDiKeranjang[0]["subtotal"] = (jmlLama + 1) * harga;
+                        int newJumlah = jmlLama + 1;
+                        adaDiKeranjang[0]["jumlah"] = newJumlah;
+                        // compute discount amount and subtotal
+                        decimal diskonTotal = newJumlah * harga * diskon / 100m;
+                        decimal subtotal = newJumlah * (harga - (harga * diskon / 100m));
+                        adaDiKeranjang[0]["diskon"] = diskon;
+                        adaDiKeranjang[0]["diskon_total"] = diskonTotal;
+                        adaDiKeranjang[0]["subtotal"] = subtotal;
                             }
                             else
                             {
-                                keranjang.Rows.Add(reader.GetInt32("id_buku"), kode, reader.GetString("judul"), harga, 1, harga);
+                        decimal diskonTotal = 1 * harga * diskon / 100m;
+                        decimal subtotal = 1 * (harga - (harga * diskon / 100m));
+                        keranjang.Rows.Add(reader.GetInt32("id_buku"), kode, reader.GetString("judul"), harga, 1, diskon, diskonTotal, subtotal);
                             }
                             HitungTotalBelanja();
                         }
@@ -150,13 +178,17 @@ namespace TOKO_BUKU
         private void HitungTotalBelanja()
         {
             totalBelanjaAktif = 0;
-            foreach (DataRow row in keranjang.Rows) 
+            totalDiskonAktif = 0;
+            foreach (DataRow row in keranjang.Rows)
             {
                 totalBelanjaAktif += Convert.ToDecimal(row["subtotal"]);
+                try { totalDiskonAktif += row.Table.Columns.Contains("diskon_total") ? Convert.ToDecimal(row["diskon_total"]) : 0m; } catch { }
             }
 
             label8.Text = "Rp " + totalBelanjaAktif.ToString("N0");
             label9.Text = "Rp " + totalBelanjaAktif.ToString("N0");
+            // show total diskon in label12
+            try { label12.Text = "Rp " + totalDiskonAktif.ToString("N0"); } catch { label12.Text = "Rp 0"; }
         }
 
         private void btnHapus_Click(object sender, EventArgs e)
@@ -169,12 +201,10 @@ namespace TOKO_BUKU
             HapusDataKeranjangTerpilih();
         }
 
-
         private void HapusDataKeranjangTerpilih()
         {
             if (dataGridView1.SelectedRows.Count > 0)
             {
-                
                 for (int i = dataGridView1.SelectedRows.Count - 1; i >= 0; i--)
                 {
                     dataGridView1.Rows.RemoveAt(dataGridView1.SelectedRows[i].Index);
@@ -190,9 +220,14 @@ namespace TOKO_BUKU
                 var row = dataGridView1.Rows[e.RowIndex];
                 decimal harga = Convert.ToDecimal(row.Cells["harga"].Value);
                 int jumlah = Convert.ToInt32(row.Cells["jumlah"].Value);
-                
-                // Hitung ulang subtotal
-                row.Cells["subtotal"].Value = harga * jumlah;
+                decimal diskon = 0m;
+                try { diskon = row.Cells["diskon"] != null && row.Cells["diskon"].Value != null ? Convert.ToDecimal(row.Cells["diskon"].Value) : 0m; } catch { diskon = 0m; }
+
+                decimal diskonTotal = jumlah * harga * diskon / 100m;
+                decimal subtotal = jumlah * (harga - (harga * diskon / 100m));
+
+                row.Cells["diskon_total"].Value = diskonTotal;
+                row.Cells["subtotal"].Value = subtotal;
                 HitungTotalBelanja();
             }
         }
@@ -202,35 +237,31 @@ namespace TOKO_BUKU
             if (string.IsNullOrWhiteSpace(textBox1.Text)) return;
             if (!decimal.TryParse(textBox1.Text, out _))
             {
-                // Hapus karakter terakhir jika bukan angka
                 textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
-                textBox1.SelectionStart = textBox1.Text.Length; 
+                textBox1.SelectionStart = textBox1.Text.Length;
             }
         }
 
         private void btnBayar_Click(object sender, EventArgs e)
         {
-            // 1. CEK KERANJANG KOSONG DI AWAL
             if (keranjang.Rows.Count == 0)
             {
                 MessageBox.Show("Tidak ada buku yang dibeli. Silakan pilih buku untuk dibeli.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(textBox1.Text)) 
-            { 
-                MessageBox.Show("Masukkan jumlah uang pembayaran!"); 
-                return; 
+            if (string.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                MessageBox.Show("Masukkan jumlah uang pembayaran!");
+                return;
             }
 
-            // 2. CEK INPUT UANG MENGGUNAKAN TRYPARSE
             if (!decimal.TryParse(textBox1.Text, out decimal uangBayar))
             {
                 MessageBox.Show("Format uang bayar tidak valid!");
                 return;
             }
 
-            // Menggunakan nilai murni dari variabel yang dihitung, bukan dari Label string
             if (uangBayar < totalBelanjaAktif)
             {
                 MessageBox.Show("Uang bayar kurang!"); return;
@@ -265,11 +296,10 @@ namespace TOKO_BUKU
                         cmdStok.Parameters.AddWithValue("@id_buku", row["id_buku"]);
                         cmdStok.ExecuteNonQuery();
                     }
-                    
+
                     trans.Commit();
 
                     string teksStruk = BuatTeksStruk(idTransaksiBaru, totalBelanjaAktif, uangBayar, kembalian);
-                    // Asumsi form Struk menerima parameter string pada constructor-nya
                     new Struk(teksStruk).ShowDialog(this);
 
                     MessageBox.Show($"Transaksi Berhasil!\nKembalian: Rp {kembalian:N0}", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -308,6 +338,7 @@ namespace TOKO_BUKU
             }
 
             sb.AppendLine("----------------------------------------");
+            sb.AppendLine(string.Format("{0,-30}{1,10:N0}", "TOTAL DISKON:", totalDiskonAktif));
             sb.AppendLine(string.Format("{0,-30}{1,10:N0}", "TOTAL:", total));
             sb.AppendLine(string.Format("{0,-30}{1,10:N0}", "BAYAR:", bayar));
             sb.AppendLine(string.Format("{0,-30}{1,10:N0}", "KEMBALIAN:", kembali));
@@ -319,31 +350,86 @@ namespace TOKO_BUKU
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            PindahHalaman<Login>();
+            var login = new Login();
+            login.StartPosition = FormStartPosition.CenterScreen;
+            login.Show();
+            this.Hide();
         }
 
-        private void PindahHalaman<T>(bool closeTopLevel = false) where T : Form, new()
+
+        private void PindahHalaman<T>() where T : Form, new()
         {
-            var parent = Application.OpenForms.OfType<Admin_dashboard>().FirstOrDefault();
-            if (parent == null)
+            if (typeof(T) == typeof(Kasir))
             {
-                if (this is T) return;
-                T formBaru = Application.OpenForms.OfType<T>().FirstOrDefault() ?? new T() { StartPosition = FormStartPosition.CenterScreen };
-                formBaru.Show();
-                formBaru.BringToFront();
-                this.Hide();
+                ShowKasirDashboard();
                 return;
             }
 
-            if (typeof(T) == typeof(Admin_dashboard))
-            {
-                parent.ShowDashboard();
-                if (this.TopLevel) { if (closeTopLevel) this.Close(); else this.Hide(); }
-                return;
-            }
+            T child = new T();
+            ShowChildForm(child);
+        } 
 
-            parent.ShowChildForm(new T());
-            if (this.TopLevel) { if (closeTopLevel) this.Close(); else this.Hide(); }
+        public void ShowChildForm(Form child)
+        {
+            try
+            {
+                if (currentChild != null)
+                {
+                    currentChild.Close();
+                    currentChild.Dispose();
+                    panelContent.Controls.Remove(currentChild);
+                    currentChild = null;
+                }
+
+                if (panelUtamaKasir != null)
+                    panelUtamaKasir.Visible = false;
+
+              
+                child.TopLevel = false;
+                child.FormBorderStyle = FormBorderStyle.None;
+                child.StartPosition = FormStartPosition.Manual;
+                // make the child fill the content panel instead of centering it
+                child.Dock = DockStyle.Fill;
+
+                panelContent.Controls.Add(child);
+                currentChild = child;
+                panelContent.Visible = true;
+
+                child.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal membuka halaman: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void ShowKasirDashboard()
+        {
+            try
+            {
+                if (currentChild != null)
+                {
+                    currentChild.Close();
+                    currentChild.Dispose();
+                    panelContent.Controls.Remove(currentChild);
+                    currentChild = null;
+                }
+
+             
+                if (panelUtamaKasir != null)
+                    panelUtamaKasir.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal kembali ke halaman Kasir: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CenterChildInPanel(Form child)
+        {
+            // legacy helper kept for compatibility: ensure child docks to fill panel
+            if (child == null) return;
+            child.Dock = DockStyle.Fill;
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -355,7 +441,7 @@ namespace TOKO_BUKU
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             try
-            { 
+            {
                 if (e.RowIndex >= 0)
                 {
                     if (!dataGridView1.Rows[e.RowIndex].IsNewRow)
@@ -365,7 +451,7 @@ namespace TOKO_BUKU
                         if (dialog == DialogResult.Yes)
                         {
                             dataGridView1.Rows.RemoveAt(e.RowIndex);
-                            HitungTotalBelanja(); 
+                            HitungTotalBelanja();
                         }
                     }
                 }
