@@ -168,7 +168,7 @@ namespace TOKO_BUKU
                 return;
             }
 
-            // Diskon (optional) - parse if provided, default to 0
+           
             decimal diskonBuku = 0m;
             if (!string.IsNullOrWhiteSpace(textBox4.Text))
             {

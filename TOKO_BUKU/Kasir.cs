@@ -44,6 +44,7 @@ namespace TOKO_BUKU
 
         private void AturKeranjang()
         {
+            
             keranjang.Columns.Add("id_buku", typeof(int));
             keranjang.Columns.Add("kode_buku", typeof(string));
             keranjang.Columns.Add("judul", typeof(string));
@@ -54,6 +55,15 @@ namespace TOKO_BUKU
             keranjang.Columns.Add("subtotal", typeof(decimal));
 
             dataGridView1.DataSource = keranjang;
+
+            dataGridView1.Columns["id_buku"].HeaderText = "ID Buku";
+            dataGridView1.Columns["kode_buku"].HeaderText = "Kode Buku";
+            dataGridView1.Columns["judul"].HeaderText = "Judul";
+            dataGridView1.Columns["harga"].HeaderText = "Harga";
+            dataGridView1.Columns["jumlah"].HeaderText = "Jumlah";
+            dataGridView1.Columns["diskon"].HeaderText = "Diskon";
+            dataGridView1.Columns["diskon_total"].HeaderText = "Diskon Total";
+            dataGridView1.Columns["subtotal"].HeaderText = "Subtotal";
         }
 
         private void AturPlaceholderCari()
@@ -438,12 +448,6 @@ namespace TOKO_BUKU
             }
         }
 
-        private void CenterChildInPanel(Form child)
-        {
-           
-            if (child == null) return;
-            child.Dock = DockStyle.Fill;
-        }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {

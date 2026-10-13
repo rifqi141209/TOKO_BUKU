@@ -51,7 +51,9 @@ namespace TOKO_BUKU
                                 col.HeaderText = col.Name.Replace("_", " ");
                             }
                         }
-                        catch { }
+                        catch {
+                        
+                        }
                     }
                 }
             }
