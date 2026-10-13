@@ -46,20 +46,22 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.panel8 = new System.Windows.Forms.Panel();
+            this.button4 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button4 = new System.Windows.Forms.Button();
+            this.panelContent = new System.Windows.Forms.Panel();
+            this.panelUtamaKasir = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.panel7.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel8.SuspendLayout();
-            this.panelContent = new System.Windows.Forms.Panel();
-            this.panelUtamaKasir = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.panelContent.SuspendLayout();
+            this.panelUtamaKasir.SuspendLayout();
             this.SuspendLayout();
             // 
             // label14
@@ -68,7 +70,7 @@
             this.label14.BackColor = System.Drawing.Color.Transparent;
             this.label14.Font = new System.Drawing.Font("NSimSun", 18F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
-            this.label14.Location = new System.Drawing.Point(176, 9);
+            this.label14.Location = new System.Drawing.Point(272, 9);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(127, 24);
             this.label14.TabIndex = 25;
@@ -186,36 +188,21 @@
             this.panel7.Size = new System.Drawing.Size(317, 403);
             this.panel7.TabIndex = 22;
             // 
-            // panelContent
-            // 
-            this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContent.Location = new System.Drawing.Point(170, 0);
-            this.panelContent.Name = "panelContent";
-            this.panelContent.Size = new System.Drawing.Size(630, 450);
-            this.panelContent.TabIndex = 26;
-            // 
-            // panelUtamaKasir
-            // 
-            this.panelUtamaKasir.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelUtamaKasir.Location = new System.Drawing.Point(0, 0);
-            this.panelUtamaKasir.Name = "panelUtamaKasir";
-            this.panelUtamaKasir.Size = new System.Drawing.Size(630, 450);
-            this.panelUtamaKasir.TabIndex = 27;
-            // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(237, 4);
+            this.button2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button2.Location = new System.Drawing.Point(241, 38);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(73, 29);
             this.button2.TabIndex = 16;
             this.button2.Text = "Cari Buku";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.btnCari_Click);
             // 
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(8, 6);
+            this.textBox2.Location = new System.Drawing.Point(4, 41);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(187, 25);
@@ -225,9 +212,9 @@
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.listBox1);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(4, 34);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(4, 72);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(310, 366);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(310, 328);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // listBox1
@@ -277,6 +264,19 @@
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(305, 450);
             this.panel8.TabIndex = 23;
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.Red;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.button4.Location = new System.Drawing.Point(226, 200);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 19;
+            this.button4.Text = "Hapus";
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // label6
             // 
@@ -339,32 +339,31 @@
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
-            // button4
+            // panelContent
             // 
-            this.button4.BackColor = System.Drawing.Color.Red;
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.button4.Location = new System.Drawing.Point(226, 200);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 19;
-            this.button4.Text = "Hapus";
-            this.button4.UseVisualStyleBackColor = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.panelContent.Controls.Add(this.panelUtamaKasir);
+            this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContent.Location = new System.Drawing.Point(0, 0);
+            this.panelContent.Name = "panelContent";
+            this.panelContent.Size = new System.Drawing.Size(800, 450);
+            this.panelContent.TabIndex = 26;
+            // 
+            // panelUtamaKasir
+            // 
+            this.panelUtamaKasir.Controls.Add(this.label14);
+            this.panelUtamaKasir.Controls.Add(this.panel7);
+            this.panelUtamaKasir.Controls.Add(this.panel8);
+            this.panelUtamaKasir.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelUtamaKasir.Location = new System.Drawing.Point(0, 0);
+            this.panelUtamaKasir.Name = "panelUtamaKasir";
+            this.panelUtamaKasir.Size = new System.Drawing.Size(800, 450);
+            this.panelUtamaKasir.TabIndex = 27;
             // 
             // Kasir
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            // add controls: left panel, then content panel which hosts the kasir panels
-            // move label14 into panelContent so it stays visible above inner panels
-            this.panelContent.Controls.Add(this.label14);
-            // put existing UI panels inside panelUtamaKasir
-            this.panelUtamaKasir.Controls.Add(this.panel7);
-            this.panelUtamaKasir.Controls.Add(this.panel8);
-            this.panelContent.Controls.Add(this.panelUtamaKasir);
-
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panelContent);
             this.Name = "Kasir";
@@ -377,8 +376,10 @@
             this.panel8.ResumeLayout(false);
             this.panel8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.panelContent.ResumeLayout(false);
+            this.panelUtamaKasir.ResumeLayout(false);
+            this.panelUtamaKasir.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

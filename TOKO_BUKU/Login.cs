@@ -47,7 +47,7 @@ namespace TOKO_BUKU
 
                             if (role == "admin")
                             {
-                                MessageBox.Show("Login berhasil sebagai Admin!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                               
 
                                 // Arahkan ke Form Admin
                                 Admin_dashboard formAdmin = new Admin_dashboard();
@@ -58,8 +58,7 @@ namespace TOKO_BUKU
                             }
                             else if (role == "kasir")
                             {
-                                MessageBox.Show("Login berhasil sebagai Kasir!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                            
 
                                 Kasir formUser = new Kasir();
 

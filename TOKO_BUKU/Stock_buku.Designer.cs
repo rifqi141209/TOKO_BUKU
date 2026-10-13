@@ -57,7 +57,7 @@
             this.label14.BackColor = System.Drawing.Color.Transparent;
             this.label14.Font = new System.Drawing.Font("NSimSun", 18F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
-            this.label14.Location = new System.Drawing.Point(176, 9);
+            this.label14.Location = new System.Drawing.Point(4, 9);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(140, 24);
             this.label14.TabIndex = 27;
@@ -66,6 +66,7 @@
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel7.Controls.Add(this.label14);
             this.panel7.Controls.Add(this.pictureBox1);
             this.panel7.Controls.Add(this.button1);
             this.panel7.Controls.Add(this.textBox3);
@@ -73,15 +74,15 @@
             this.panel7.Controls.Add(this.label8);
             this.panel7.Controls.Add(this.label4);
             this.panel7.Controls.Add(this.flowLayoutPanel1);
-            this.panel7.Location = new System.Drawing.Point(172, 47);
+            this.panel7.Location = new System.Drawing.Point(172, 0);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(628, 403);
+            this.panel7.Size = new System.Drawing.Size(628, 450);
             this.panel7.TabIndex = 25;
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::TOKO_BUKU.Properties.Resources.Sigma_PFP__Unique_Profile_Pictures___Best_Wallpaper_HD;
-            this.pictureBox1.Location = new System.Drawing.Point(393, 23);
+            this.pictureBox1.Location = new System.Drawing.Point(415, 65);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(201, 112);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -91,7 +92,7 @@
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.button1.Location = new System.Drawing.Point(28, 110);
+            this.button1.Location = new System.Drawing.Point(20, 142);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(273, 29);
             this.button1.TabIndex = 11;
@@ -101,7 +102,7 @@
             // textBox3
             // 
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox3.Location = new System.Drawing.Point(142, 65);
+            this.textBox3.Location = new System.Drawing.Point(134, 97);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(159, 20);
             this.textBox3.TabIndex = 7;
@@ -110,7 +111,7 @@
             // 
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox2.Enabled = false;
-            this.textBox2.Location = new System.Drawing.Point(142, 33);
+            this.textBox2.Location = new System.Drawing.Point(134, 65);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(159, 20);
             this.textBox2.TabIndex = 6;
@@ -120,7 +121,7 @@
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.Transparent;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(25, 67);
+            this.label8.Location = new System.Drawing.Point(17, 99);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(35, 13);
             this.label8.TabIndex = 5;
@@ -131,7 +132,7 @@
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(25, 35);
+            this.label4.Location = new System.Drawing.Point(17, 67);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(60, 13);
             this.label4.TabIndex = 4;
@@ -140,7 +141,7 @@
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.dataGridView1);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(4, 145);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 192);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(621, 255);
             this.flowLayoutPanel1.TabIndex = 1;
@@ -150,7 +151,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(3, 3);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(609, 246);
+            this.dataGridView1.Size = new System.Drawing.Size(618, 246);
             this.dataGridView1.TabIndex = 0;
             // 
             // panel1
@@ -228,7 +229,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label14);
             this.Controls.Add(this.panel7);
             this.Controls.Add(this.panel1);
             this.Name = "Stock_buku";
@@ -241,7 +241,6 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

@@ -121,6 +121,7 @@
             this.label1.Size = new System.Drawing.Size(82, 19);
             this.label1.TabIndex = 8;
             this.label1.Text = "Dashboard";
+            this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // label7
             // 
@@ -431,6 +432,7 @@
             this.Controls.Add(this.panelContent);
             this.Name = "Admin_dashboard";
             this.Text = "Admin_dashboard";
+            this.Load += new System.EventHandler(this.Admin_dashboard_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Transaksi)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

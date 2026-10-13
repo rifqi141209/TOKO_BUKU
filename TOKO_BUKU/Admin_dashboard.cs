@@ -156,7 +156,6 @@ namespace TOKO_BUKU
                 child.TopLevel = false;
                 child.FormBorderStyle = FormBorderStyle.None;
                 child.StartPosition = FormStartPosition.Manual;
-                // make child fill the panel instead of centering it
                 child.Dock = DockStyle.Fill;
 
                 panelContent.Controls.Add(child);
@@ -168,7 +167,7 @@ namespace TOKO_BUKU
                     child.Size = new Size(Math.Max(600, panelContent.ClientSize.Width - 40), Math.Max(300, panelContent.ClientSize.Height - 40));
                 }
 
-                // child will fill the panel; no centering needed
+                
                 child.Show();
 
                 var side = child.Controls.Find("panel1", true).FirstOrDefault();
@@ -245,6 +244,16 @@ namespace TOKO_BUKU
             {
                 MessageBox.Show("Tidak Bisa Logout: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void Admin_dashboard_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
